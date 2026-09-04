@@ -107,13 +107,22 @@ for d in "$FINZOX_DOMAIN" "$AVIATOR_DOMAIN" "$ERP_DOMAIN"; do
     "$LINT"/nginx/*.conf
 done
 
-# Main-context test conf (mirrors what the server loads).
+# Main-context test conf (mirrors what the server loads, but every
+# writable path is redirected into the sandbox so a non-root user can
+# run nginx -t without touching the live server).
 # Unquoted heredoc so $LINT expands to the real sandbox path.
 cat > "$LINT/nginx-test.conf" <<CONF
+pid $LINT/nginx.pid;
+error_log $LINT/error.log;
 events { worker_connections 1024; }
 http {
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
+    client_body_temp_path $LINT/client_temp;
+    proxy_temp_path       $LINT/proxy_temp;
+    fastcgi_temp_path     $LINT/fastcgi_temp;
+    uwsgi_temp_path       $LINT/uwsgi_temp;
+    scgi_temp_path        $LINT/scgi_temp;
     include $LINT/nginx/common.conf;
     include $LINT/nginx/finzox.conf;
     include $LINT/nginx/aviator.conf;
