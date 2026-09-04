@@ -54,6 +54,10 @@ sudo mkdir -p /etc/nginx/snippets
 IFS=',' read -ra DOMAINS <<< "$ALL_DOMAINS"
 for d in "${DOMAINS[@]}"; do render_snippet "$d"; done
 
+echo "==> [sync] 2.5/6 nginx -t gate + reload (make ACME webroot live BEFORE certbot)"
+sudo nginx -t
+sudo systemctl reload nginx
+
 echo "==> [sync] 3/6 certbot issuance (webroot, idempotent)"
 for d in "${DOMAINS[@]}"; do
   if [ ! -f "/etc/letsencrypt/renewal/$d.conf" ]; then
@@ -70,7 +74,7 @@ done
 echo "==> [sync] 4/6 re-render snippets (flip to real certs where newly issued)"
 for d in "${DOMAINS[@]}"; do render_snippet "$d"; done
 
-echo "==> [sync] 5/6 nginx -t gate + reload"
+echo "==> [sync] 5/6 nginx -t gate + reload (activate flipped snippets)"
 sudo nginx -t
 sudo systemctl reload nginx
 

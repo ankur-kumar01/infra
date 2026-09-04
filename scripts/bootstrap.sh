@@ -4,9 +4,11 @@
 # Run by the host-infra Jenkins pipeline 'Bootstrap EC2' stage.
 set -euo pipefail
 
-echo "==> [bootstrap] apt update + install nginx/certbot"
-sudo apt-get update -qq
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nginx certbot python3-certbot-nginx rsync
+echo "==> [bootstrap] apt update + install nginx/certbot (skipped if present)"
+if ! command -v nginx >/dev/null 2>&1 || ! command -v certbot >/dev/null 2>&1; then
+  sudo apt-get update -qq
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nginx certbot python3-certbot-nginx rsync
+fi
 
 echo "==> [bootstrap] ensure nginx running"
 sudo systemctl enable --now nginx
