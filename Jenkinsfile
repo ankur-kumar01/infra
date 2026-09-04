@@ -43,7 +43,7 @@ pipeline {
                 sh '''
                     set -e
                     mkdir -p lint-certs
-                    for d in finzox.example.com aviator.example.com erp.example.com; do
+                    for d in finzox.live aviator.finzox.live erp.finzox.live; do
                       openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
                         -keyout "lint-certs/$d.key" -out "lint-certs/$d.crt" \
                         -subj "/CN=$d" 2>/dev/null
@@ -51,7 +51,7 @@ pipeline {
                     docker run --rm -v "$PWD/nginx:/nginx:ro" -v "$PWD/lint-certs:/certs:ro" \
                       nginx:alpine sh -c '
                         mkdir -p /etc/nginx/snippets
-                        for d in finzox.example.com aviator.example.com erp.example.com; do
+                        for d in finzox.live aviator.finzox.live erp.finzox.live; do
                           printf "ssl_certificate     /certs/%s.crt;\nssl_certificate_key /certs/%s.key;\n" "$d" "$d" \
                             > "/etc/nginx/snippets/ssl-$d.conf"
                         done

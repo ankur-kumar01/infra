@@ -19,11 +19,11 @@ nginx + certbot are **never hand-edited** on the server.
 
 | App | Repo | Domain | Loopback port(s) | Route |
 |---|---|---|---|---|
-| finzox | `digital_viser` | finzox.example.com | 5000 | backend serves API + SPA + Socket.io + uploads |
-| aviator | `Aviator` | aviator.example.com | 5011 | API + Socket.io |
-| aviator | `Aviator` | aviator.example.com | 5012 | user SPA |
-| aviator | `Aviator` | aviator.example.com | 5013 | admin SPA at `/admin/` |
-| erp | `erp` | erp.example.com | 5021 | Next.js server |
+| finzox | `digital_viser` | **finzox.live** | 5000 | backend serves API + SPA + Socket.io + uploads |
+| aviator | `Aviator` | **aviator.finzox.live** | 5011 | API + Socket.io |
+| aviator | `Aviator` | **aviator.finzox.live** | 5012 | user SPA |
+| aviator | `Aviator` | **aviator.finzox.live** | 5013 | admin SPA at `/admin/` |
+| erp | `erp` | **erp.finzox.live** | 5021 | Next.js server |
 
 **Adding an app:** new `nginx/<app>.conf` + entry in `scripts/domains.env` +
 port registered here + `bootstrap.sh` deploy-dir loop + compose binds `127.0.0.1:<port>`.
