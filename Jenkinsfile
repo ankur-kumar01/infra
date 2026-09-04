@@ -130,7 +130,10 @@ http {
     include $LINT/nginx/erp.conf;
 }
 CONF
-nginx -t -c "$LINT/nginx-test.conf"
+# nginx -t attempts to bind privileged ports -> must run as root.
+# Safe: EADDRINUSE against the live nginx is tolerated by nginx during -t,
+# and every writable path above is sandboxed into $LINT.
+sudo nginx -t -c "$LINT/nginx-test.conf"
 echo "lint OK"
 REMOTE
                     '''
