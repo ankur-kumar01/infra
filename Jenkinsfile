@@ -107,8 +107,9 @@ for d in "$FINZOX_DOMAIN" "$AVIATOR_DOMAIN" "$ERP_DOMAIN"; do
     "$LINT"/nginx/*.conf
 done
 
-# Main-context test conf (mirrors what the server loads)
-cat > "$LINT/nginx-test.conf" <<'CONF'
+# Main-context test conf (mirrors what the server loads).
+# Unquoted heredoc so $LINT expands to the real sandbox path.
+cat > "$LINT/nginx-test.conf" <<CONF
 events { worker_connections 1024; }
 http {
     include /etc/nginx/mime.types;
