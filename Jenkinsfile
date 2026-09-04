@@ -118,6 +118,7 @@ events { worker_connections 1024; }
 http {
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
+    access_log $LINT/access.log;
     client_body_temp_path $LINT/client_temp;
     proxy_temp_path       $LINT/proxy_temp;
     fastcgi_temp_path     $LINT/fastcgi_temp;
